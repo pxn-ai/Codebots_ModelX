@@ -8627,29 +8627,30 @@ Section 6 Complete.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-Conclusion-&amp;-Final-Report">7. Conclusion &amp; Final Report<a class="anchor-link" href="#7.-Conclusion-&amp;-Final-Report">¶</a></h2><p>This project successfully developed a machine learning model to predict dementia risk using only non-medical, patient-reported data, culminating in an advanced, timeline-aware approach.</p>
+<h1 id="7.-Conclusion-&amp;-Final-Report">7. Conclusion &amp; Final Report<a class="anchor-link" href="#7.-Conclusion-&amp;-Final-Report">¶</a></h1><p>This project successfully developed an advanced, timeline-aware model to predict dementia risk using only non-medical, patient-reported data.</p>
 <p><strong>Methodology:</strong></p>
 <ol>
-<li><strong>Data Integrity:</strong> We identified that the dataset contained multiple visits per patient. To prevent data leakage and build an "honest" model, we implemented a <code>GroupShuffleSplit</code> on the Patient ID (<code>NACCID</code>) for all training and testing.</li>
-<li><strong>Advanced Feature Engineering:</strong> We transformed the data from static snapshots into a dynamic patient history. We engineered new features to track the <em>change</em> (delta) and <em>rate of change</em> (velocity) for key metrics like <code>NACCBMI</code> and <code>ComorbidityCount</code> between visits.</li>
+<li><strong>Data Integrity:</strong> We identified that the dataset contained multiple visits per patient. To prevent data leakage and build an "honest" model, we implemented a <strong><code>GroupShuffleSplit</code></strong> on the Patient ID (<code>NACCID</code>) for all model training and testing.</li>
+<li><strong>Advanced Feature Engineering:</strong> We transformed the data from static snapshots into a dynamic patient history. We engineered new "timeline" features to track the <em>change</em> (delta) and <em>rate of change</em> (velocity) for key metrics like <code>NACCBMI</code> and <code>ComorbidityCount</code> between visits.</li>
 </ol>
 <p><strong>Model Performance:</strong>
-This new timeline feature set significantly improved model performance. After comparing four models, <strong>XGBoost</strong> and <strong>CatBoost</strong> were identified as the top two. We then tuned both to find the ultimate champion.</p>
+This new feature set significantly improved model performance. After comparing four models, <strong>XGBoost</strong> was identified as the top performer. We then tuned it to find the ultimate champion.</p>
 <p><strong>Final Model Comparison (Tuned Timeline Models):</strong></p>
 <ul>
 <li><strong>Tuned XGBoost Accuracy: 0.7504 (WINNER)</strong></li>
-<li><em>Tuned CatBoost Accuracy: 0.7496</em></li>
+<li><em>Default XGBoost Accuracy: 0.7493</em></li>
+<li><em>Default CatBoost Accuracy: 0.7483</em></li>
 </ul>
-<p>Our final, optimized model is the <strong>Tuned XGBoost Classifier</strong>, which successfully improved on its default score (0.7493) and outperformed all other models.</p>
+<p>Our final, optimized model is the <strong>Tuned XGBoost Classifier</strong>, which successfully improved on its default score and outperformed all other models.</p>
 <p><strong>Explainability &amp; Key Insights (from SHAP Analysis):</strong>
-A SHAP analysis <em>(see plot in cell 6)</em> on the winning XGBoost model revealed the key drivers behind its predictions:</p>
+A SHAP analysis <em>(see plot in cell 6)</em> on the winning XGBoost model revealed the true drivers of its predictions, highlighting a key difference from a simple feature importance plot.</p>
 <ol>
-<li><strong>Top Predictors:</strong> The model learned logical, explainable patterns. The most dominant predictors were <code>num__NACCBMI</code> (BMI), <code>num_NACCAGE</code> (Age), and <code>num_EDUC</code> (Education).</li>
-<li><strong>Feature Engineering Success:</strong> Our original engineered feature, <code>num__ComorbidityCount</code> (the static count of health issues), was the <strong>4th most powerful predictor</strong>, confirming its high value.</li>
-<li><strong>Key Risk Factors:</strong> The SHAP plot clearly shows that <strong>high BMI</strong>, <strong>high Age</strong>, <strong>low Education</strong>, and a <strong>high Comorbidity Count</strong> all strongly contribute to an <em>increased</em> predicted risk of dementia.</li>
-<li><strong>Social Insight:</strong> The model also learned that subjects whose co-participant was a "Friend/Neighbor" (<code>cat__INRELTO_5.0</code>) had a <em>lower</em> predicted risk, suggesting that social independence may be a protective factor.</li>
+<li><strong>Top Predictors (SHAP):</strong> The SHAP plot shows the model's true logic. The most impactful features are <code>num__NACCAGE</code> (Age), <code>num_EDUC</code> (Education), and <code>num__NACCBMI</code> (BMI).</li>
+<li><strong>Key Risk Factors:</strong> The analysis clearly shows that <strong>higher age</strong>, <strong>lower education</strong>, and <strong>higher BMI</strong> all strongly contribute to an <em>increased</em> predicted risk of dementia.</li>
+<li><strong>Timeline Feature Success:</strong> Our engineered timeline feature, <strong><code>velocity_NACCBMI</code></strong> (the <em>rate of change</em> in BMI), was the <strong>4th most important predictor</strong>. This proves our hypothesis that a patient's <em>health trajectory</em> is a critical factor.</li>
+<li><strong>SHAP vs. Importance:</strong> The SHAP analysis correctly identified <code>NACCAGE</code> as the most important feature, whereas the standard "gain" importance plot (the bar chart) failed to capture its true impact. This confirms SHAP as the more reliable method for understanding our model's logic.</li>
 </ol>
-<p>This confirms that an "honest" model, built on advanced timeline features and robustly tuned, can provide a viable, accurate, and explainable tool for early risk assessment.</p>
+<p>This confirms that an "honest" model, built on advanced timeline features, provides a highly accurate and explainable tool for early risk assessment.</p>
 </div>
 </div>
 </div>
